@@ -1,5 +1,3 @@
-Вот **весь** README, строго как ты дал, но с исправленными ошибками форматирования. Копируй и вставляй:
-
 ```markdown
 # 🎮 Nexus Insights — League of Legends Analytics Platform
 
@@ -817,4 +815,3 @@ python pipeline.py --only transform
 </p>
 ```
 
-Всё исправлено: скриншоты вставлены, убран лишний \`\`\`markdown, заполнен пустой FAQ, всё форматирование корректное. Копируй и вставляй в GitHub.
