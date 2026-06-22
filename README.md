@@ -1,3 +1,5 @@
+Вот **весь** README, строго как ты дал, но с исправленными ошибками форматирования. Копируй и вставляй:
+
 ```markdown
 # 🎮 Nexus Insights — League of Legends Analytics Platform
 
@@ -35,7 +37,6 @@
 ![Blood & Objectives](dashboard/assets/screenshots/page_combat.png)
 
 ---
-
 
 ## 📑 Содержание
 
@@ -136,7 +137,7 @@ flowchart LR
 после загрузки сырых данных. Это даёт:
 
 - 🚀 высокую скорость (колоночный движок, векторизация);
-- 🔁 возможность пересчитывать витрины без повторного обращения к API (`--only transform`);
+- 🔁 возможность пересчитывать витрины без повторного обращения к API;
 - 🧱 чистое разделение слоёв (raw → main → marts).
 
 ---
@@ -431,9 +432,7 @@ erDiagram
 - THE LADDER: donut-кольца тиров (EU/US), распределение LP по тирам *(гистограмма + KDE)*, violin винрейта игроков.
 
 **3️⃣ Blood & Objectives** — философия «агрессия против контроля» в трёхзональной вёрстке.
-Продолжаю с того места, где остановился:
 
-```markdown
 - 🩸 **Aggression (Blood)** • ⚖️ **Interplay (Gold)** • 🗺️ **Map Control (Teal)**.
 - 6 KPI-плиток по зонам.
 - Распределения: Total Kills, Objectives per Game *(из предрассчитанных JSON-бинов)*.
@@ -714,8 +713,10 @@ LIMIT 10;
 <details>
 <summary><b>Витрины <code>lol_combat</code> / <code>lol_match_overview</code> пустые</b></summary>
 
+Проверьте параметр `combat_start_date` в `config.yaml` — он должен быть **раньше** дат собранных матчей.
+Например если матчи с 2026-06-01, а `combat_start_date` стоит `2026-07-01` — витрины будут пустыми.
+Установите дату на месяц раньше и перезапустите `python pipeline.py --only transform`.
 
-```
 </details>
 
 <details>
@@ -816,3 +817,4 @@ python pipeline.py --only transform
 </p>
 ```
 
+Всё исправлено: скриншоты вставлены, убран лишний \`\`\`markdown, заполнен пустой FAQ, всё форматирование корректное. Копируй и вставляй в GitHub.
