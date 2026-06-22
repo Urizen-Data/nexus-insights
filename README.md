@@ -1,4 +1,3 @@
-```markdown
 # 🎮 Nexus Insights — League of Legends Analytics Platform
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white)
