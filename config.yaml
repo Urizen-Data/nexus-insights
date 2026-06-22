@@ -1,0 +1,64 @@
+# config.yaml — конфигурация ETL-пайплайна
+
+# ============================================
+# EXTRACT STAGE (extract.py)
+# ============================================
+
+# Тайминги / лимиты
+rate_limit_pause: 1.2          # пауза между запросами, сек
+matches_per_player: 100        # сколько матчей запрашивать на игрока (max 100)
+
+# Двухэтапный сбор игроков
+build_players_per_tier: 200    # ЭТАП 1: большой пул в players.csv (буфер от перекоса EU/US)
+top_players_per_tier: 100      # ЭТАП 2: выбрать топ-N из пула для загрузки матчей
+
+# Фильтр очереди (420 = RANKED_SOLO_5x5)
+queue_id: 420
+
+# Пути для extract (резолвятся относительно папки скрипта)
+raw_data_dir: raw_data
+players_csv: players.csv
+processed_players_file: processed_players.txt
+processed_matches_file: processed_matches.txt
+
+# Прочее
+save_every: 10                 # как часто (в матчах) сбрасывать прогресс на диск
+log_level: INFO                # DEBUG, INFO, WARNING, ERROR
+
+# ============================================
+# TRANSFORM STAGE (transform.py)
+# ============================================
+
+# Входные данные (читаются из raw_data_dir)
+# Выходные данные (куда складывать Parquet)
+parquet_output_dir: parquet_folder   # папка для готовых Parquet-файлов
+processed_csv_dir: processed_csv     # папка для очищенных CSV (опционально, для отладки)
+
+# Справочники Data Dragon (если есть)
+data_dragon_dir: data_dragon         # папка со справочниками (champions.csv, items.csv, spells.csv)
+
+# ============================================
+# LOAD STAGE (load.py)
+# ============================================
+
+# Путь к базе данных DuckDB (резолвится относительно папки скрипта)
+duckdb_path: parquet_folder/lol.duckdb
+
+# ============================================
+# COMBAT VITRINES (Blood & Objectives)
+# ============================================
+
+# Процент матчей для семплирования 2D-плотности (dpm vs kp)
+combat_density_match_pct: 20
+
+# Процент строк для семплирования KDA-violin
+combat_violin_row_pct: 15
+
+# Порог ремейка (матчи короче этого считаются ремейками)
+combat_remake_sec: 300
+
+# Дата начала периода анализа (ДОЛЖНА быть НЕ в будущем, иначе витрины будут пустыми)
+combat_start_date: '2026-05-01'
+
+# Минимальное число игр чемпиона для попадания в витрину (нужен transform.py)
+min_games: 1

@@ -1,0 +1,109 @@
+/* ============================================================
+   Глобальные стили для всех страниц дашборда
+   ============================================================ */
+
+/* ── Info-иконка «?» с всплывающей подсказкой ── */
+.info-wrap {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    z-index: 20;
+}
+
+.info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: "Beaufort for LoL", serif;
+    cursor: help;
+    opacity: 0.55;
+    transition: opacity 0.2s ease;
+    background: rgba(10, 17, 20, 0.7);
+    text-align: center;
+    line-height: 18px;
+}
+
+.info-wrap:hover .info-icon {
+    opacity: 1;
+}
+
+.info-tip {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 26px;
+    right: 0;
+    width: 280px;
+    padding: 12px 14px;
+    background: #1a1f24;
+    color: #F0E6D2;
+    font-family: "Beaufort for LoL", "Times New Roman", serif;
+    font-size: 12.5px;
+    line-height: 1.55;
+    letter-spacing: 0.3px;
+    text-align: left;
+    border: 1px solid #C8AA6E;
+    border-top: 2px solid #C8AA6E;
+    border-radius: 12px;
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.6), 0 0 18px rgba(200, 170, 110, 0.10);
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    pointer-events: none;
+}
+
+.info-wrap:hover .info-tip {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* ── Ссылки автора ── */
+.author-link {
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.author-link:hover {
+    color: #C8AA6E;
+}
+
+/* ── Навигационная панель ── */
+.navbar {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px 20px 10px 20px;
+    background: #0A1114;
+    border-bottom: 1px solid #2c2c2c;
+    flex-wrap: wrap;
+}
+
+.nav-button {
+    text-decoration: none;
+    color: #A09B8C;
+    font-family: 'Beaufort for LoL', 'Marcellus', 'Times New Roman', serif;
+    font-size: 14px;
+    padding: 10px 24px;
+    border: 1px solid #2c2c2c;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.5px;
+    user-select: none;
+}
+
+.nav-button:hover {
+    color: #C8AA6E;
+    border-color: #C8AA6E;
+    box-shadow: 0 0 12px rgba(200,170,110,0.15);
+}
+
+.nav-button.active {
+    color: #C8AA6E;
+    border-color: #C8AA6E;
+    background: rgba(200,170,110,0.08);
+}

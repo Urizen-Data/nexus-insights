@@ -1,0 +1,7 @@
+﻿dash
+duckdb
+pandas
+numpy
+plotly
+requests
+scipy
