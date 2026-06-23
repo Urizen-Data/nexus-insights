@@ -18,7 +18,7 @@
 ---
 
 <p align="center">
-  <a href="https://huggingface.co/spaces/Urizen-Data/lol-dashboard">
+  <a href="https://Urizen-Data-lol-dashboard.hf.space">
     <img src="https://img.shields.io/badge/Nexus_Insights-Open_Dashboard-FF9D00?style=for-the-badge&logoColor=white" alt="Nexus Insights Dashboard">
   </a>
 </p>
@@ -71,7 +71,7 @@
 Дашборд развёрнут на Hugging Face Spaces и доступен 24/7 без ограничений по времени.
 
 <p align="center">
-  <a href="https://huggingface.co/spaces/Urizen-Data/lol-dashboard">
+  <a href="https://Urizen-Data-lol-dashboard.hf.space">
     <img src="https://img.shields.io/badge/Nexus_Insights-Open_Dashboard-FF9D00?style=for-the-badge&logoColor=white" alt="Nexus Insights Dashboard">
   </a>
 </p>
