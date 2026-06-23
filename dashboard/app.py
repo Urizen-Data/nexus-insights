@@ -27,19 +27,22 @@ import page_combat                       # вкладка 3: Blood & Objectives
 
 
 # ═══════════════════════════════════════════════════════════
-# УБИТЬ СТАРЫЙ ПРОЦЕСС НА ПОРТУ 8050
+# ОПРЕДЕЛЯЕМ ГДЕ ЗАПУЩЕНО: локально или в Docker
 # ═══════════════════════════════════════════════════════════
-# ВАЖНО: при debug=True Dash запускает ДВА процесса (watcher + worker).
-# kill_port нужно выполнять ТОЛЬКО в главном процессе, иначе reloader
-# будет убивать сам себя при каждой перезагрузке.
+IN_DOCKER = os.path.exists('/.dockerenv') or os.environ.get('DOCKER_CONTAINER', False)
+
+
+# ═══════════════════════════════════════════════════════════
+# УБИТЬ СТАРЫЙ ПРОЦЕСС НА ПОРТУ 8050 (только локально)
+# ═══════════════════════════════════════════════════════════
 def kill_port(port):
     """
     Находит и убивает процесс, слушающий указанный порт.
     Использует netstat + taskkill (только для Windows).
+    В Docker не вызывается.
     """
     try:
         import subprocess
-        # Ищем PID процесса на порту
         result = subprocess.run(
             f'netstat -ano | findstr :{port}',
             shell=True, capture_output=True, text=True
@@ -54,9 +57,8 @@ def kill_port(port):
         pass
 
 
-# Выполняем kill_port ТОЛЬКО при самом первом запуске,
-# а не при каждой авто-перезагрузке reloader'а.
-if os.environ.get('WERKZEUG_RUN_MAIN') != 'true':
+# Выполняем kill_port ТОЛЬКО локально и при первом запуске
+if not IN_DOCKER and os.environ.get('WERKZEUG_RUN_MAIN') != 'true':
     kill_port(8050)
 
 
@@ -65,8 +67,8 @@ if os.environ.get('WERKZEUG_RUN_MAIN') != 'true':
 # ═══════════════════════════════════════════════════════════
 app = dash.Dash(
     __name__,
-    suppress_callback_exceptions=True,          # разрешаем callback-и для динамических компонентов
-    title="LoL Analytics Dashboard"            # заголовок вкладки браузера
+    suppress_callback_exceptions=True,
+    title="LoL Analytics Dashboard"
 )
 
 # ── ★ Кастомный index.html — встраиваем глобальные CSS-стили ──
@@ -75,10 +77,11 @@ app.index_string = f'''
 <html>
     <head>
         {{%metas%}}
+        <meta name="viewport" content="width=1400, initial-scale=0.5, user-scalable=yes">
         <title>{{%title%}}</title>
         {{%favicon%}}
         {{%css%}}
-        {GLOBAL_CSS}                           <!-- глобальные стили из common.py -->
+        {GLOBAL_CSS}
     </head>
     <body>
         {{%app_entry%}}
@@ -91,64 +94,47 @@ app.index_string = f'''
 # ═══════════════════════════════════════════════════════════
 # LAYOUT — навигация + контент страниц
 # ═══════════════════════════════════════════════════════════
-# Передаём ФУНКЦИЮ (не результат вызова), чтобы layout
-# пересобирался при каждой перезагрузке (hot reload).
 def serve_app_layout():
     """Возвращает полный layout приложения с навигацией."""
     return html.Div([
-        # ── Навигационная панель (вкладки) ──
         html.Div([
             html.A("🏆 Champions Meta", href="#", id="nav-champions",
-                   className="nav-button active"),      # активная по умолчанию
+                   className="nav-button active"),
             html.A("📊 Match Overview", href="#", id="nav-overview",
                    className="nav-button"),
             html.A("⚔️ Blood & Objectives", href="#", id="nav-combat",
                    className="nav-button"),
         ], className="navbar"),
-
-        # ── Контейнер для содержимого активной страницы ──
         html.Div(id="page-content"),
-
-        # ── Общий футер ──
         build_footer()
     ], style=APP_STYLE)
 
 
-app.layout = serve_app_layout   # ← передаём ФУНКЦИЮ, без скобок ()
+app.layout = serve_app_layout
 
 
 # ═══════════════════════════════════════════════════════════
 # CALLBACK — переключение вкладок
 # ═══════════════════════════════════════════════════════════
 @app.callback(
-    # Обновляем: содержимое страницы + классы активности кнопок
-    [Output("page-content", "children"),           # контент выбранной страницы
-     Output("nav-champions", "className"),         # класс кнопки Champions
-     Output("nav-overview", "className"),          # класс кнопки Overview
-     Output("nav-combat", "className")],           # класс кнопки Combat
-    [Input("nav-champions", "n_clicks"),           # клик по Champions
-     Input("nav-overview", "n_clicks"),            # клик по Overview
-     Input("nav-combat", "n_clicks")]              # клик по Combat
+    [Output("page-content", "children"),
+     Output("nav-champions", "className"),
+     Output("nav-overview", "className"),
+     Output("nav-combat", "className")],
+    [Input("nav-champions", "n_clicks"),
+     Input("nav-overview", "n_clicks"),
+     Input("nav-combat", "n_clicks")]
 )
 def switch_page(n1, n2, n3):
-    """
-    Переключает содержимое страницы и подсветку активной вкладки.
-    При первом запуске (ни один триггер не сработал) — показываем Champions.
-    """
     ctx = dash.callback_context
-
-    # Если ни одна кнопка не нажата — страница по умолчанию
     if not ctx.triggered:
         return (page_champions.layout, "nav-button active", "nav-button", "nav-button")
-
-    # Определяем какая кнопка нажата
     button_id = ctx.triggered[0]['prop_id'].split('.')[0]
-
     if button_id == "nav-champions":
         return (page_champions.layout, "nav-button active", "nav-button", "nav-button")
     elif button_id == "nav-overview":
         return (page_overview.layout, "nav-button", "nav-button active", "nav-button")
-    else:  # nav-combat
+    else:
         return (page_combat.layout, "nav-button", "nav-button", "nav-button active")
 
 
@@ -156,12 +142,24 @@ def switch_page(n1, n2, n3):
 # ТОЧКА ВХОДА — запуск сервера
 # ═══════════════════════════════════════════════════════════
 if __name__ == '__main__':
-    print("🔗 Дашборд: http://127.0.0.1:8050")
-    app.run(
-        debug=True,                          # подробные ошибки + hot reload
-        use_reloader=True,                   # авто-перезапуск при сохранении файла
-        dev_tools_hot_reload=True,           # перезагрузка фронтенда без F5
-        dev_tools_hot_reload_interval=1,     # проверять изменения раз в 1 сек
-        dev_tools_hot_reload_watch_interval=1,
-        port=8050,
-    )
+    if IN_DOCKER:
+        # Продакшен-режим (Docker / Hugging Face)
+        port = int(os.environ.get('PORT', 8050))
+        print(f"🔗 Дашборд запущен (production mode) на порту {port}")
+        app.run(
+            debug=False,
+            host='0.0.0.0',
+            port=port,
+        )
+    else:
+        # Режим разработки (локально)
+        print("🔗 Дашборд: http://127.0.0.1:8050")
+        app.run(
+            debug=True,
+            use_reloader=True,
+            dev_tools_hot_reload=True,
+            dev_tools_hot_reload_interval=1,
+            dev_tools_hot_reload_watch_interval=1,
+            host='127.0.0.1',
+            port=8050,
+        )
