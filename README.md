@@ -5,6 +5,7 @@
 ![Parquet](https://img.shields.io/badge/Format-Parquet-blue)
 ![Riot API](https://img.shields.io/badge/Data-Riot%20API-red)
 ![Dash](https://img.shields.io/badge/Dashboard-Dash%20%2F%20Plotly-019733?logo=plotly&logoColor=white)
+![Docker](https://img.shields.io/badge/Deploy-Docker-2496ED?logo=docker&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 **Nexus Insights** — это законченная end-to-end платформа аналитики **League of Legends**:
@@ -13,6 +14,14 @@
 для исследования меты. Данные извлекаются из официального Riot Games API, обогащаются
 статическими справочниками Data Dragon и превращаются в аналитические витрины в **DuckDB**,
 которые затем визуализируются в трёхстраничном веб-приложении.
+
+---
+
+<p align="center">
+  <a href="https://huggingface.co/spaces/Urizen-Data/lol-dashboard">
+    <img src="https://img.shields.io/badge/🚀_Live_Demo-Hugging_Face-FF9D00?style=for-the-badge&logo=huggingface&logoColor=white" alt="Live Demo">
+  </a>
+</p>
 
 ---
 
@@ -37,6 +46,7 @@
 
 ## Содержание
 
+- [Живое демо](#живое-демо)
 - [Назначение и практическая ценность](#назначение-и-практическая-ценность)
 - [Архитектура платформы](#архитектура-платформы)
 - [Структура проекта](#структура-проекта)
@@ -45,6 +55,7 @@
 - [Витрины для дашборда](#витрины-для-дашборда)
 - [Дашборд (BI-приложение)](#дашборд-bi-приложение)
 - [Установка и запуск](#установка-и-запуск)
+- [Docker-контейнеризация и деплой](#docker-контейнеризация-и-деплой)
 - [Конфигурация](#конфигурация)
 - [Отказоустойчивость и инженерные решения](#отказоустойчивость-и-инженерные-решения)
 - [Проверка результата](#проверка-результата)
@@ -52,6 +63,20 @@
 - [Технологический стек](#технологический-стек)
 - [Лицензия](#лицензия)
 
+---
+
+## Живое демо
+
+Дашборд развёрнут на Hugging Face Spaces и доступен 24/7:
+
+<p align="center">
+  <a href="https://huggingface.co/spaces/Urizen-Data/lol-dashboard">
+    <img src="https://img.shields.io/badge/Открыть_дашборд-LoL_Analytics-FF9D00?style=for-the-badge&logo=huggingface&logoColor=white" alt="Open Dashboard">
+  </a>
+</p>
+
+При первом открытии после периода неактивности контейнеру требуется 30–60 секунд на «холодный старт».
+Последующие загрузки работают мгновенно.
 ---
 
 ## Назначение и практическая ценность
@@ -702,7 +727,31 @@ LIMIT 10;
 Строк participants:    кол-во матчей × 10
 Витрин на выходе:      6 + 4 + 7                     = 17
 ```
+## Docker-контейнеризация и деплой
 
+Дашборд упакован в Docker-контейнер и развёрнут на Hugging Face Spaces. Это позволяет
+запускать его на любой платформе, поддерживающей Docker, без необходимости установки
+Python-окружения.
+
+### Dockerfile
+
+```dockerfile
+FROM python:3.10-slim
+
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+COPY dashboard/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY dashboard/ ./dashboard/
+COPY parquet_folder/ ./parquet_folder/
+
+WORKDIR /app/dashboard
+
+EXPOSE 7860
+CMD ["python", "app.py"]
 ---
 
 ## FAQ и troubleshooting
