@@ -19,7 +19,7 @@
 
 <p align="center">
   <a href="https://huggingface.co/spaces/Urizen-Data/lol-dashboard">
-    <img src="https://img.shields.io/badge/🚀_Live_Demo-Hugging_Face-FF9D00?style=for-the-badge&logo=huggingface&logoColor=white" alt="Live Demo">
+    <img src="https://img.shields.io/badge/Nexus_Insights-Open_Dashboard-FF9D00?style=for-the-badge&logoColor=white" alt="Nexus Insights Dashboard">
   </a>
 </p>
 
@@ -46,7 +46,7 @@
 
 ## Содержание
 
-- [Живое демо](#живое-демо)
+- [Production-дашборд](#production-дашборд)
 - [Назначение и практическая ценность](#назначение-и-практическая-ценность)
 - [Архитектура платформы](#архитектура-платформы)
 - [Структура проекта](#структура-проекта)
@@ -65,18 +65,19 @@
 
 ---
 
-## Живое демо
+## Production-дашборд
 
-Дашборд развёрнут на Hugging Face Spaces и доступен 24/7:
+Дашборд развёрнут на Hugging Face Spaces и доступен 24/7 без ограничений по времени.
 
 <p align="center">
   <a href="https://huggingface.co/spaces/Urizen-Data/lol-dashboard">
-    <img src="https://img.shields.io/badge/Открыть_дашборд-LoL_Analytics-FF9D00?style=for-the-badge&logo=huggingface&logoColor=white" alt="Open Dashboard">
+    <img src="https://img.shields.io/badge/Nexus_Insights-Open_Dashboard-FF9D00?style=for-the-badge&logoColor=white" alt="Nexus Insights Dashboard">
   </a>
 </p>
 
-При первом открытии после периода неактивности контейнеру требуется 30–60 секунд на «холодный старт».
-Последующие загрузки работают мгновенно.
+<p align="center">
+  <sub>* При первом открытии после периода неактивности контейнеру требуется 30–60 секунд на «холодный старт».<br>Последующие загрузки работают мгновенно.</sub>
+</p>
 ---
 
 ## Назначение и практическая ценность
