@@ -23,6 +23,9 @@
   </a>
 </p>
 
+<p align="center">
+  <sub>🌐 <i>Дашборд открывается с включённым VPN.</i></sub>
+</p>
 ---
 
 ## Скриншоты дашборда
@@ -74,6 +77,10 @@
   <a href="https://Urizen-Data-lol-dashboard.hf.space">
     <img src="https://img.shields.io/badge/Nexus_Insights-Open_Dashboard-FF9D00?style=for-the-badge&logoColor=white" alt="Nexus Insights Dashboard">
   </a>
+</p>
+
+<p align="center">
+  <sub>🌐 <i>Дашборд открывается с включённым VPN.</i></sub>
 </p>
 
 ### Особенности деплоя
